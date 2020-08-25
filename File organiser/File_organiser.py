@@ -1,10 +1,10 @@
 import os
 import subprocess
 import re
-from pathlib import Path
+import shutil
 
-def list_file_types():
-    all_files = os.listdir()
+
+def list_file_types(all_files):
     types_list = []
     for file in all_files:
         if os.path.isfile(file):
@@ -19,5 +19,15 @@ def make_directories(types_list):
         if not os.path.exists(type):
             os.mkdir(type)
 
-types = list_file_types()
+
+def move_files(all_files):
+    for file in all_files:
+        if os.path.isfile(file):
+            type = re.search(r"(\.)(\w+)$", file)
+            shutil.move(file, type[2])
+
+
+all_files = os.listdir()
+types = list_file_types(all_files)
 make_directories(types)
+move_files(all_files)
