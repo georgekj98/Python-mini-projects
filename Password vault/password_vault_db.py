@@ -58,8 +58,8 @@ class Database:
         self.connection.commit()
 
 
-    def db_full_query(self):
-        ret = 'SELECT * FROM user JOIN vault ON user.user_id = vault.user_id'
+    def db_full_query(self,fetch_user_id):
+        ret = f"SELECT * FROM vault WHERE user_id ='{fetch_user_id}'"
         data = self.cursor.execute(ret)
         return data.fetchall()
 
