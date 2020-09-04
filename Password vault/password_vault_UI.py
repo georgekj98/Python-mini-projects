@@ -15,11 +15,6 @@ def populate_list(user_id, pass_list):
         pass_list.insert(END, ins)
 
 
-def select_item(event):
-
-    global selected_item
-    index = 1
-
 
 def login(user_id):
     log = Tk()
