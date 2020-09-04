@@ -37,9 +37,12 @@ class Database:
 
     def new_entry(self, user_id, site, password):
         if self.check_NULL((user_id, site, password)):
-            new_entry_query = "INSERT INTO vault VALUES(?,?,?)"
-            self.cursor.execute(new_entry_query, (user_id, site, password))
-            self.connection.commit()
+            check_query = f"SELECT site FROM vault WHERE user_id = '{user_id}'"
+            all_pwds = self.cursor.execute(check_query)
+            if (site,) not in all_pwds.fetchall():
+                new_entry_query = "INSERT INTO vault VALUES(?,?,?)"
+                self.cursor.execute(new_entry_query, (user_id, site, password))
+                self.connection.commit()
     
 
     def remove_entry(self, user_id, del_site, del_password):
@@ -87,6 +90,6 @@ class Database:
     def __del__(self):
         self.connection.close()
 
-#db = Database('vault_trial.db')
+db = Database('vault_trial.db')
 #db.new_user("george", "mypass")
-#print(db.user_vault_query("george"))
+print(db.user_vault_query("george"))
