@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+from tkinter import Scrollbar
 from password_vault_db import Database
 
 
@@ -12,6 +13,12 @@ def populate_list(user_id, pass_list):
     for row in db.user_vault_query(user_id):
         ins = f"   {row[0]}            {row[1]}            {row[2]}"
         pass_list.insert(END, ins)
+
+
+def select_item(event):
+
+    global selected_item
+    index = 1
 
 
 def login(user_id):
@@ -30,7 +37,7 @@ def login(user_id):
     password_entry.grid(row = 1, column = 1, padx = 10)
 
     add_button = Button(log, text = "Add", command = lambda : db.new_entry(user_id, website_entry.get(), password_entry.get()), width = 17)
-    add_button.grid(row = 2, column = 0, pady = 10)
+    add_button.grid(row = 2, column = 0, pady = 10,padx = 10)
 
     remove_button = Button(log, text = "Remove", command = lambda : db.remove_entry(user_id, website_entry.get(), password_entry.get()), width = 17)
     remove_button.grid(row = 2, column = 1)
@@ -45,11 +52,11 @@ def login(user_id):
     refresh_button.grid(row = 3, column = 1)
 
     scrollbar = Scrollbar(log)
-    scrollbar.grid(row = 4, column = 3)
     pass_list.configure(yscrollcommand = scrollbar.set)
     scrollbar.configure(command = pass_list.yview)
+    scrollbar.grid(row = 4, column = 3)
     #Bind select
-    pass_list.bind('<<ListBoxSelect>>')
+    #pass_list.bind('<<ListBoxSelect>>', select_item)
 
     populate_list(user_id, pass_list)
     log.title(f"{user_id}")
