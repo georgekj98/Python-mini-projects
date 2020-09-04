@@ -5,8 +5,35 @@ from password_vault_db import Database
 
 db = Database('vault_trial.db')
 
-def login():
+def login(user_id):
     log = Tk()
+    
+    website_text = StringVar()
+    website_label = Label(log, text = 'Website', pady = 20, padx = 15)
+    website_label.grid(row = 0, column = 0)
+    website_entry = Entry(log, textvariable = website_text)
+    website_entry.grid(row = 0, column = 1, padx = 10)
+
+    password_text = StringVar()
+    password_label = Label(log, text = 'Password', padx = 15)
+    password_label.grid(row = 0, column = 2)
+    password_entry = Entry(log, textvariable = password_text)
+    password_entry.grid(row = 0, column = 3, padx = 10)
+
+    add_button = Button(log, text = "Add", command = lambda : db.new_entry(user_id, website_entry.get(), password_entry.get()), width = 17)
+    add_button.grid(row = 2, column = 1, pady = 20)
+
+    remove_button = Button(log, text = "Remove", command = lambda : db.remove_entry(user_id, website_entry.get(), password_entry.get()), width = 17)
+    remove_button.grid(row = 2, column = 2, pady = 20)
+
+    update_button = Button(log, text = "Update", command = lambda : db.update_site_password(user_id, website_entry.get(), password_entry.get()), width = 17)
+    update_button.grid(row = 2, column = 3, pady = 20)
+
+
+
+
+
+    log.geometry("500x400")
     log.mainloop()
 
 
@@ -19,7 +46,7 @@ def login_check():
     check_user = db.user_id_query(user_id)
     if check_user:
         if check_user[0][1] == passcode:
-            login()
+            login(user_id)
         else:
             messagebox.showerror(title="Error",message= "Password is wrong")
             passcode_entry.delete(0, END)
