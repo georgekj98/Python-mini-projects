@@ -13,17 +13,21 @@ def login():
 def login_check():
     user_id = user_id_entry.get()
     passcode = passcode_entry.get()
+    passcode_entry.delete(0, END)
+    passcode_entry.insert(END,"*" * len(passcode))
     check_user = db.user_id_query(user_id)
-    print(check_user)
+    #print(check_user)
     if check_user:
         if check_user[0][1] == passcode:
             login()
+        else:
+            messagebox.showerror(title="Error",message= "Password is wrong")
     else:
-        print("Doesnt exist or wrong")
-    print(user_id)
-    print(passcode)
-    passcode_entry.delete(0, END)
-    passcode_entry.insert(END,"*" * len(passcode))
+        messagebox.showerror(title="Error",message= "User Id doesn't exist")
+        #print("Doesnt exist or wrong")
+    #print(user_id)
+    #print(passcode)
+    
 
 
 def sign_up_check():
