@@ -55,7 +55,9 @@ class Database:
     def remove_user(self, remove_user_id):
         if self.check_NULL((remove_user_id,)):
             del_user_query = f"DELETE FROM user WHERE user_id ='{remove_user_id}'"
+            del_vault_query = f"DELETE FROM vault WHERE user_id ='{remove_user_id}'"
             self.cursor.execute(del_user_query)
+            self.cursor.execute(del_vault_query)
             self.connection.commit()
 
 
@@ -90,6 +92,6 @@ class Database:
     def __del__(self):
         self.connection.close()
 
-db = Database('vault_trial.db')
+#db = Database('vault_trial.db')
 #db.new_user("george", "mypass")
-print(db.user_vault_query("george"))
+#print(db.user_vault_query("george"))
