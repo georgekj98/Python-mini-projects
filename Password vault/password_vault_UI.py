@@ -5,6 +5,15 @@ from password_vault_db import Database
 
 db = Database('vault_trial.db')
 
+def populate_list(user_id, pass_list):
+
+    pass_list.delete(0, END)
+    pass_list.insert(END,"   User            Website            Password")
+    for row in db.user_vault_query(user_id):
+        ins = f"   {row[0]}            {row[1]}            {row[2]}"
+        pass_list.insert(END, ins)
+
+
 def login(user_id):
     log = Tk()
     
@@ -16,24 +25,35 @@ def login(user_id):
 
     password_text = StringVar()
     password_label = Label(log, text = 'Password', padx = 15)
-    password_label.grid(row = 0, column = 2)
+    password_label.grid(row = 1, column = 0)
     password_entry = Entry(log, textvariable = password_text)
-    password_entry.grid(row = 0, column = 3, padx = 10)
+    password_entry.grid(row = 1, column = 1, padx = 10)
 
     add_button = Button(log, text = "Add", command = lambda : db.new_entry(user_id, website_entry.get(), password_entry.get()), width = 17)
-    add_button.grid(row = 2, column = 1, pady = 20)
+    add_button.grid(row = 2, column = 0, pady = 10)
 
     remove_button = Button(log, text = "Remove", command = lambda : db.remove_entry(user_id, website_entry.get(), password_entry.get()), width = 17)
-    remove_button.grid(row = 2, column = 2, pady = 20)
+    remove_button.grid(row = 2, column = 1)
 
     update_button = Button(log, text = "Update", command = lambda : db.update_site_password(user_id, website_entry.get(), password_entry.get()), width = 17)
-    update_button.grid(row = 2, column = 3, pady = 20)
+    update_button.grid(row = 3, column = 0)
 
+    pass_list = Listbox(log, width = 45, height =8, border = 0)
+    pass_list.grid(row =4, column = 0, columnspan = 3, rowspan = 4,padx = 20, pady = 20)
 
+    refresh_button = Button(log, text = "Refresh", command = lambda : populate_list(user_id, pass_list), width = 17)
+    refresh_button.grid(row = 3, column = 1)
 
+    scrollbar = Scrollbar(log)
+    scrollbar.grid(row = 4, column = 3)
+    pass_list.configure(yscrollcommand = scrollbar.set)
+    scrollbar.configure(command = pass_list.yview)
+    #Bind select
+    pass_list.bind('<<ListBoxSelect>>')
 
-
-    log.geometry("500x400")
+    populate_list(user_id, pass_list)
+    log.title(f"{user_id}")
+    log.geometry("350x380")
     log.mainloop()
 
 
