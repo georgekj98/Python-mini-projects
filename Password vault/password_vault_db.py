@@ -58,11 +58,20 @@ class Database:
         self.connection.commit()
 
 
-    def db_full_query(self,fetch_user_id):
+    def user_pass_query(self,fetch_user_id):
         ret = f"SELECT * FROM vault WHERE user_id ='{fetch_user_id}'"
+        data = self.cursor.execute(ret)
+        return data.fetchall()
+    
+
+    def user_id_query(self, fetch_user_id):
+        ret = f"SELECT * FROM user WHERE user_id ='{fetch_user_id}'"
         data = self.cursor.execute(ret)
         return data.fetchall()
 
 
     def __del__(self):
         self.connection.close()
+
+#db = Database('vault_trial.db')
+#db.new_user("george", "mypass")
