@@ -24,7 +24,10 @@ def move_files(all_files):
     for file in all_files:
         if os.path.isfile(file):
             type = re.search(r"(\.)(\w+)$", file)
-            shutil.move(file, type[2])
+            try:
+                shutil.move(file, type[2])
+            except Exception as e:
+                print(e)
 
 
 all_files = os.listdir()
